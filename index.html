@@ -1,44 +1,239 @@
-<!doctype html>
-<html> 
-    <head> 
-        <meta charset="UTF-8"> 
-        <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1, user-scalable=no"> 
-        <title>chatGPT</title>
-        <link rel="icon" type="image/x-icin" href="./images/chatGPT.png">
-        <script src="./js/jQuery3.6.3_min.js"></script>
-        <link rel="stylesheet" href="./css/bootstrap.min.css">
-        <link rel="stylesheet" href="./css/index.css">
-    </head> 
-    <body>
-        <div class="header">
-            <img src="./images/chatGPT.png" alt="log"><span>chatGPT</span>
-        </div>
-        <div class="dialogBox">
-            <p class="left">
-                <img src="./images/chatGPT.png" alt="chatGPT-log">
-                <span class="time"></span>
-            </p>
-            <p class="leftContent">
-                <textarea class="leftText" disabled>您需要什么帮助呢？</textarea>
-            </p>
-        </div>
-        <div class="inputBox">
-            <input class="text" type="text" placeholder="请输入内容">
-            <button class="send">发送</button>
-        </div>
-        <div class="apikey">
-            <div>
-                <input class="apikeyInput" type="text" placeholder="请输入apikey">
-            </div>
-            <div class="apikeyTip">
-                <div>#长按页面最上面的chatGPT的logo图片2秒可以换apikey#</div>
-                <div class="meg" style="color: #f00;"></div>
-            </div>
-            <div>
-                <button class="apikeyBtn btn btn-secondary">确定</button>
-            </div>
-        </div>
-        <div class="cover"></div>
-        <script src="./js/index.js"></script>     
-    </body>
-</html>
+ <!DOCTYPE html>
+ <html>
+
+ <head>
+     <meta charset="utf-8">
+     <title>chatGPT</title>
+     <link rel="icon" type="image/x-icon" href="./images/chatGPT.png">
+     <script src="./js/jQuery3.6.3_min.js"></script>
+     <style>
+         * {
+             margin: 0;
+             padding: 0
+         }
+
+         body {
+             background: #848c91;
+             font-size: 16px;
+         }
+
+         body a {
+             outline: none;
+         }
+
+         a img {
+             border: none;
+         }
+
+         ul {
+             list-style-type: none;
+         }
+
+         .header {
+             text-align: center;
+             line-height: 50px;
+             height: 50px;
+             background: #415f8a;
+         }
+
+         .header img {
+             vertical-align: middle;
+             margin-right: 15px;
+             width: 30px;
+         }
+
+         .header span {
+             font-size: 22px;
+             color: #FFF;
+         }
+
+         .left {
+             float: left;
+             width: 60px;
+             height: 60px;
+             background: #FFF;
+             margin-top: 10px;
+             padding: 10px 5px 0;
+             position: relative;
+         }
+
+         .left img {
+             width: 40px;
+             border-radius: 20px;
+         }
+
+         .left .time {
+             line-height: 10px;
+             width: 10px;
+             height: 10px;
+             background: #449ED1;
+             border-radius: 20px;
+             position: absolute;
+             right: -5px;
+             top: 0;
+             text-align: center;
+         }
+
+         .leftContent {
+             background: #FFF;
+             float: right;
+             width: 180px;
+             word-wrap: break-word;
+             word-break: break-all;
+         }
+
+         .leftContent textarea {
+             width: 155px;
+             height: auto;
+             padding: 5px;
+             resize: none;
+             border: none;
+             background: #FFF;
+         }
+
+         .dialogBox {
+             max-width: 750px;
+             min-width: 200px;
+             margin: 0px auto;
+             margin-top: 20px;
+         }
+
+         .inputBox {
+             position: fixed;
+             bottom: 0;
+             width: 100%;
+             z-index: 10;
+             padding: 10px;
+         }
+
+         .inputBox .text {
+             width: 250px;
+             height: 30px;
+             background: #FFF;
+             padding: 0 10px;
+         }
+
+         .inputBox .send {
+             float: right;
+             width: 60px;
+             border-radius: 5px;
+             background: #449ED1;
+             color: #FFF;
+             font-size: 17px;
+         }
+
+         .apikey {
+             position: fixed;
+             width: 100%;
+             height: 100%;
+             z-index: 999;
+             text-align: center;
+         }
+
+         .apikey .apikeyInput {
+             width: 200px;
+             height: 40px;
+             border: 1px solid #415f8a;
+             font-size: 18px;
+             margin-top: 10px;
+         }
+
+         .apikey .apikeyTip {
+             margin: 10px 0;
+             font-size: 16px;
+         }
+
+         .cover {
+             background: rgba(48, 61, 90, 0.5);
+             position: fixed;
+             top: 0px;
+             left: 0px;
+             width: 100%;
+             height: 100%;
+             z-index: 998;
+         }
+
+         @media only screen and (min-width: 320px) and (max-width: 375px) {
+             .leftContent textarea {
+                 height: auto;
+                 resize: none;
+                 width: 155px;
+                 padding: 2px;
+             }
+
+             .header {
+                 height: 60px;
+             }
+
+             .header img {
+                 width: 35px;
+                 height: 35px;
+                 margin-right: 18px;
+             }
+
+             .left {
+                 width: 60px;
+                 height: 60px;
+                 margin-right: 5px;
+                 padding-left: 3px;
+                 padding-top: 3px;
+             }
+
+             .leftContent {
+                 width: 150px;
+                 height: auto;
+             }
+
+             .inputBox {
+                 position: fixed;
+                 bottom: 0;
+                 width: 100%;
+                 z-index: 10;
+                 padding: 0 0 10px;
+             }
+
+             .inputBox .text {
+                 width: 210px;
+                 height: 30px;
+             }
+
+             .inputBox .send {
+                 width: 50px;
+             }
+
+             .apikey .apikeyInput {
+                 width: 160px;
+                 margin-top: 6px;
+                 height: 34px;
+             }
+         }
+     </style>
+ </head>
+
+ <body>
+     <div class="header"> <img src="./images/chatGPT.png" alt="logo" /><span>chatGPT</span> </div>
+     <div class="dialogBox">
+         <p class="left"> <img src="./images/chatGPT.png" alt="logo"> <span class="time"></span> </p>
+         <p class="leftContent"> <textarea class="leftText" disabled>您需要什么帮助呢？</textarea> </p>
+     </div>
+     <div class="inputBox"> <input class="text" type="text" placeholder="请输入内容"> <button class="send">发送</button> </div>
+     <div class="apikey">
+         <div> <input class="apikeyInput" type="text" placeholder="请输入apikey"> </div>
+         <div class="apikeyTip">
+             <div class="meg" style="color: #f00;"></div>
+         </div>
+         <div> <button class="apikeyBtn btn btn-secondary">确定</button> </div>
+     </div>
+     <div class="cover"></div>
+     <script src="./js/index.js"></script>
+     <script>
+         let baseFont = window.screen.availWidth;
+         document.querySelector('html').style.fontSize = baseFont / 25 + 'px';
+         window.addEventListener('resize', () => {
+             baseFont = window.screen.availWidth;
+             document.querySelector('html').style.fontSize = baseFont / 25 + 'px';
+         });
+     </script>
+ </body>
+
+ </html>
