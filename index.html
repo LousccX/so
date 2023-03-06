@@ -1,0 +1,44 @@
+<!doctype html>
+<html> 
+    <head> 
+        <meta charset="UTF-8"> 
+        <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1, user-scalable=no"> 
+        <title>chatGPT</title>
+        <link rel="icon" type="image/x-icin" href="./images/chatGPT.png">
+        <script src="./js/jQuery3.6.3_min.js"></script>
+        <link rel="stylesheet" href="./css/bootstrap.min.css">
+        <link rel="stylesheet" href="./css/index.css">
+    </head> 
+    <body>
+        <div class="header">
+            <img src="./images/chatGPT.png" alt="log"><span>chatGPT</span>
+        </div>
+        <div class="dialogBox">
+            <p class="left">
+                <img src="./images/chatGPT.png" alt="chatGPT-log">
+                <span class="time"></span>
+            </p>
+            <p class="leftContent">
+                <textarea class="leftText" disabled>您需要什么帮助呢？</textarea>
+            </p>
+        </div>
+        <div class="inputBox">
+            <input class="text" type="text" placeholder="请输入内容">
+            <button class="send">发送</button>
+        </div>
+        <div class="apikey">
+            <div>
+                <input class="apikeyInput" type="text" placeholder="请输入apikey">
+            </div>
+            <div class="apikeyTip">
+                <div>#长按页面最上面的chatGPT的logo图片2秒可以换apikey#</div>
+                <div class="meg" style="color: #f00;"></div>
+            </div>
+            <div>
+                <button class="apikeyBtn btn btn-secondary">确定</button>
+            </div>
+        </div>
+        <div class="cover"></div>
+        <script src="./js/index.js"></script>     
+    </body>
+</html>
