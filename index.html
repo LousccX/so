@@ -1,9 +1,23 @@
+<!DOCTYPE html>
+<html>
+
 <head>
     <meta charset="utf-8">
     <title>chatGPT</title>
     <link rel="icon" type="image/x-icon" href="./images/chatGPT.png">
     <script src="./js/jQuery3.6.3_min.js" defer></script>
+
     <style>
+        :root {
+            --color-blue: #449ED1;
+            --color-grey: #f5f5f5;
+            --color-white: #FFF;
+            --color-black: #000;
+            --color-shadow: rgba(0, 0, 0, 0.2);
+            --font-size: 16px;
+            --font-family: 'Helvetica Neue', sans-serif;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -11,9 +25,9 @@
         }
 
         body {
-            background: #f8f8f8;
-            font-size: 16px;
-            font-family: 'Helvetica Neue', sans-serif;
+            background: var(--color-grey);
+            font-size: var(--font-size);
+            font-family: var(--font-family);
         }
 
         body a {
@@ -32,8 +46,8 @@
             text-align: center;
             line-height: 50px;
             height: 50px;
-            background: #415f8a;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+            background: var(--color-blue);
+            box-shadow: 0px 2px 5px var(--color-shadow);
         }
 
         .header img {
@@ -44,7 +58,7 @@
 
         .header span {
             font-size: 22px;
-            color: #FFF;
+            color: var(--color-white);
             text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
         }
 
@@ -52,9 +66,9 @@
             float: left;
             width: 60px;
             height: 60px;
-            background: #FFF;
+            background: var(--color-white);
             margin-top: 10px;
-            padding: 10px 5px 0;
+            padding: 10px 5px 0 0;
             position: relative;
         }
 
@@ -67,7 +81,7 @@
             line-height: 10px;
             width: 10px;
             height: 10px;
-            background: #449ED1;
+            background: var(--color-blue);
             border-radius: 20px;
             position: absolute;
             right: -5px;
@@ -76,14 +90,14 @@
         }
 
         .leftContent {
-            background: #FFF;
+            background: var(--color-white);
             float: left;
             width: 180px;
             word-wrap: break-word;
             word-break: break-all;
             padding: 10px;
             border-radius: 5px;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 2px 5px var(--color-shadow);
         }
 
         .leftContent textarea {
@@ -92,7 +106,7 @@
             padding: 5px;
             resize: none;
             border: none;
-            background: #FFF;
+            background: var(--color-white);
             font-size: 14px;
         }
 
@@ -114,31 +128,30 @@
             width: 100%;
             z-index: 10;
             padding: 10px;
-            background: #FFF;
-            box-shadow: 0px -5px 5px rgba(0, 0, 0, 0.1);
+            background: var(--color-white);
+            box-shadow: 0px -5px 5px var(--color-shadow);
         }
 
         .inputBox .text {
             width: 70%;
             height: 30px;
-            background: #f5f5f5;
+            background: var(--color-grey);
             padding: 0 10px;
             border: none;
             border-radius: 5px;
             font-size: 14px;
-            color: #333;
+            color: var(--color-black);
         }
 
         .inputBox .send {
             float: right;
             width: 25%;
             border-radius: 5px;
-            background: #449ED1;
-            color: #FFF;
+            background: var(--color-blue);
+            color: var(--color-white);
             font-size: 16px;
             cursor: pointer;
         }
-
 
         .apikey {
             position: fixed;
@@ -151,18 +164,18 @@
         .apikey .apikeyInput {
             width: 200px;
             height: 40px;
-            border: 1px solid #415f8a;
+            border: 1px solid var(--color-blue);
             font-size: 18px;
             margin-top: 10px;
             padding: 5px 10px;
             border-radius: 5px;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 2px 5px var(--color-shadow);
         }
 
         .apikey .apikeyTip {
             margin: 10px 0;
             font-size: 16px;
-            color: #333;
+            color: var(--color-black);
         }
 
         .apikey .meg {
@@ -172,13 +185,13 @@
         .apikeyBtn {
             width: 100px;
             height: 40px;
-            background: #449ED1;
-            color: #FFF;
+            background: var(--color-blue);
+            color: var(--color-white);
             font-size: 16px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 2px 5px var(--color-shadow);
         }
 
         .cover {
@@ -252,23 +265,41 @@
 </head>
 
 <body>
-    <div class="header"> <img src="./images/chatGPT.png" alt="logo" /><span>chatGPT</span> </div>
-    <div class="dialogBox">
-        <p class="left"> <img src="./images/chatGPT.png" alt="logo"> <span class="time"></span> </p>
-        <p class="leftContent"> <textarea class="leftText" disabled>您需要什么帮助呢？</textarea> </p>
+    <div class="header">
+        <img src="./images/chatGPT.png" alt="logo" />
+        <span>chatGPT</span>
     </div>
-    <div class="inputBox"> <input class="text" type="text" placeholder="请输入内容"> <button class="send">发送</button> </div>
+    <div class="dialogBox">
+        <p class="left">
+            <img src="./images/chatGPT.png" alt="logo">
+            <span class="time"></span>
+        </p>
+        <p class="leftContent">
+            <textarea class="leftText" disabled>问？</textarea>
+        </p>
+    </div>
+    <div class="inputBox">
+        <input class="text" type="text" placeholder="请输入内容">
+        <button class="send">发送</button>
+    </div>
     <div class="apikey">
-        <div> <input class="apikeyInput" type="text" placeholder="请输入apikey"> </div>
-        <div class="apikeyTip">
-            <div class="meg"></div>
+        <div>
+            <input class="apikeyInput" type="text" placeholder="请输入apikey">
         </div>
-        <div> <button class="apikeyBtn btn btn-secondary">确定</button> </div>
+        <div class="apikeyTip">
+            <div class="msg"></div>
+        </div>
+        <div>
+            <button class="apikeyBtn btn btn-secondary">确定</button>
+        </div>
     </div>
     <div class="cover"></div>
     <script src="./js/index.js" defer></script>
     <script>
-        // 模块化设计，将字体大小调整函数提取为单独的模块 const setFontSize = () => { let baseFont = window.screen.availWidth; document.querySelector('html').style.fontSize = baseFont / 25 + 'px'; }
+        const setFontSize = () => {
+            let baseFont = window.screen.availWidth;
+            document.querySelector('html').style.fontSize = baseFont / 25 + 'px';
+        }
 
         setFontSize();
 
