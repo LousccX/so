@@ -55,7 +55,7 @@ $(function() {
                 prompt: text
             });
         $.ajax({
-            url: 'https://api.openai.com/v1/completions',
+            url: 'http://api.openai.com/v1/completions/',
             type: 'post',
             dataType: 'json',
             headers: {
@@ -92,4 +92,15 @@ $(function() {
             }
         }, 1000);
     }
+});
+
+const setFontSize = () => {
+    let baseFont = window.screen.availWidth;
+    document.querySelector('html').style.fontSize = baseFont / 25 + 'px';
+}
+
+setFontSize();
+
+window.addEventListener('resize', () => {
+    setFontSize();
 });
