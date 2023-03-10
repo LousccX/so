@@ -2,187 +2,6 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <title>OpenAI Chatbot Demo</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-        }
-
-        .container {
-            width: 500px;
-            margin: 0 auto;
-            padding-top: 50px;
-        }
-
-        .text {
-            width: 100%;
-            height: 30px;
-            margin-bottom: 10px;
-            padding: 5px;
-            box-sizing: border-box;
-        }
-
-        .button {
-            width: 100%;
-            height: 40px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-
-        .messages {
-            margin-top: 20px;
-        }
-
-        .user-message {
-            background-color: #f1f1f1;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 10px 10px 0 10px;
-            float: left;
-            clear: both;
-            max-width: 70%;
-        }
-
-        .system-message {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 10px 10px 10px 0;
-            float: right;
-            clear: both;
-            max-width: 70%;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <input type="text" class="text" placeholder="请输入文本内容">
-        <button class="button" onclick="sendMessage()">发送</button>
-        <div class="messages"></div>
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        /**
-         * 发送POST请求到OpenAI API，获取AI模型的响应结果
-         * @function
-         * @returns {void}
-         */
-        function sendMessage() {
-            // 从输入框中获取用户输入的文本内容，并去除首尾空格
-            var text = $.trim($('.text').val());
-            // 生成请求头中的Authorization字段值，用于身份验证
-            let Authorization = 'Bearer ' + 'your_api_key';
-
-            // 定义请求体中的数据
-            let data = {
-                model: 'gpt-3.5-turbo', // AI模型的名称
-                temperature: 1, // 温度参数
-                max_tokens: 16, // 最大生成令牌数
-                top_p: 1, // 基于概率的文本生成方式
-                frequency_penalty: 0, // 频率惩罚参数
-                presence_penalty: 0, // 存在惩罚参数
-                prompt: text, // 用户输入的文本内容
-                messages: [{
-                    "role": "user",
-                    "content": text
-                }], // 对话消息
-            };
-
-            // 如果存在系统提示，则将其添加到请求体中的messages数组中
-            let good = "您好，我是AI助手，请问您有什么需要帮助的吗？";
-            if (text === "") {
-                data.messages.push({
-                    role: "system", // 消息角色为系统
-                    content: good, // 系统提示内容
-                });
-            } else {
-                data.messages.push({
-                    role: "user", // 消息角色为用户
-                    content: text // 用户输入的文本内容
-                });
-            }
-
-            // 发送POST请求到OpenAI API
-            $.ajax({
-                    url: 'https://api.openai.com/v1/chat/completions', // 请求的URL
-                    type: 'POST', // 请求的类型
-                    dataType: 'json', // 期望的响应数据类型
-                    headers: {
-                        Authorization: Authorization, // 身份验证的Authorization字段值
-                        'Content-Type': 'application/json' // 请求体的数据类型
-                    },
-                    data: JSON.stringify(data), // 请求体中的数据
-                    async: true // 是否以异步方式发送请求
-                })
-                .done(function(res) {
-                    // 请求成功时的回调函数
-                    console.log(res);
-                    // 处理响应数据并展示到UI上
-                    let responseText = res.choices[0].text;
-                    data.messages.push({
-                        role: "system", // 消息角色为系统
-                        content: responseText // AI模型的回复内容
-                    });
-                    showMessages(data); // 将data作为参数传入函数中展示对话消息
-                })
-                .fail(function(jqXHR, textStatus, errorThrown) {
-                    // 请求失败时的回调函数
-                    console.log(jqXHR.responseText);
-                    console.log(textStatus);
-                    console.log(errorThrown);
-                });
-        }
-
-        /**
-         * 在UI上展示对话消息
-         * @function
-         * @param {object} data - 包含对话消息的数据对象
-         * @returns {void}
-         */
-        function showMessages(data) {
-            let messageHtml = "";
-            for (let i = 0; i < data.messages.length; i++) {
-                let message = data.messages[i];
-                if (message.role === "user") {
-                    messageHtml += '<div class="user-message">' + message.content + '</div>';
-                } else {
-                    messageHtml += '<div class="system-message">' + message.content + '</div>';
-                }
-            }
-            $('.messages').html(messageHtml);
-        }
-    </script>
-</body>
-
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!DOCTYPE html>
-<html>
-
-<head>
     <meta charset="utf-8">
     <title>OpenAI Chat</title>
     <style>
@@ -282,7 +101,7 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        const apiKey = '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';
+        const apiKey = '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';
         const orgId = 'org-tcEMECGlmCYE4XfjCKiVxH1B';
 
         const createCompletion = async (prompt) => {
@@ -293,8 +112,8 @@
                     temperature: 0,
                     max_tokens: 1000,
                     top_p: 1,
-                    frequency_penalty: 1,
-                    presence_penalty: 1,
+                    frequency_penalty: 0,
+                    presence_penalty: 0,
 
                 }, {
                     headers: {

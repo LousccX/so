@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1">
+</head>
+body>
+<div class="container">
+    <h1>OpenAI Chat</h1>
+    <div id="messages"></div>
+    <div class="input-box">
+        <input type="text" id="input" placeholder="Type your message here..." autofocus>
+        <button id="submit">Send</button>
+        <div class="loading">Loading...</div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    const apiKey = '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';
+    const orgId = 'org-tcEMECGlmCYE4XfjCKiVxH1B';
+
+    const createCompletion = async (prompt) => {
+        try {
+            const response = await axios.post('https://api.openai.com/v1/completions', {
+                prompt: prompt,
+                model: 'text-davinci-003',
+                temperature: 0,
+                max_tokens: 1000,
+                top_p: 1,
+                frequency_penalty: 0,
+                presence_penalty: 0,
+
+            }, {
+                headers: {
+                    Authorization: `Bearer ${apiKey}`,
+                    'OpenAI-Organization': orgId,
+                    'Content-Type': 'application/json'
+                }
+            });
+            return response.data.choices[0].text;
+        } catch (error) {
+            console.error(error);
+            return 'Sorry, an error occurred while processing your request.';
+        }
+    };
+
+    <
+    /html>
