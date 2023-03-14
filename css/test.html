@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>OpenAI Chat</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .message {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .message .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .message .content {
+            background-color: #eee;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .message .content p {
+            margin: 0;
+        }
+
+        .message .content .meta {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .message .content.sent {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        .message .content.received {
+            background-color: #f1f1f1;
+        }
+
+        .input-box {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        .input-box input {
+            flex-grow: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            margin-right: 10px;
+        }
+
+        .input-box button {
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        /* 新增样式 */
+        .loading {
+            color: #888;
+            font-size: 12px;
+            margin-left: 10px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>OpenAI Chat</h1>
+        <div id="messages"></div>
+        <div class="input-box">
+            <input type="text" id="input" placeholder="Type your message here..." autofocus>
+            <button id="submit">Send</button>
+            <div class="loading">Loading...</div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const apiKey = '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';
+        const orgId = 'org-tcEMECGlmCYE4XfjCKiVxH1B';
+
+        const createCompletion = async (prompt) => {
+            try {
+                const response = await axios.post('https://api.openai.com/v1/completions', {
+                    prompt: prompt,
+                    model: 'text-davinci-003',
+                    temperature: 0,
+                    max_tokens: 1000,
+                    top_p: 1,
+                    frequency_penalty: 0,
+                    presence_penalty: 0,
+
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${apiKey}`,
+                        'OpenAI-Organization': orgId,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                return response.data.choices[0].text;
+            } catch (error) {
+                console.error(error);
+                return 'Sorry, an error occurred while processing your request.';
+            }
+        };
+
+        const createMessage = (content, sent) => {
+            const message = document.createElement('div');
+            message.className = 'message';
+            const avatar = document.createElement('div');
+            avatar.className = 'avatar';
+            const contentBox = document.createElement('div');
+            contentBox.className = `content ${sent ? 'sent' : 'received'}`;
+            const paragraph = document.createElement('p');
+            paragraph.innerText = content;
+            const meta = document.createElement('div');
+            meta.className = 'meta';
+            meta.innerText = sent ? 'Sent' : 'Received';
+            contentBox.appendChild(paragraph);
+            contentBox.appendChild(meta);
+            message.appendChild(avatar);
+            message.appendChild(contentBox);
+            return message;
+        };
+
+        const sendMessage = async () => {
+            const inputBox = document.getElementById('input');
+            const inputText = inputBox.value.trim();
+            if (!inputText) {
+                return;
+            }
+            inputBox.value = '';
+            const message = createMessage(inputText, true);
+            const messages = document.getElementById('messages');
+            messages.appendChild(message);
+            messages.scrollTop = messages.scrollHeight;
+            const loading = document.querySelector('.loading');
+            loading.style.display = 'inline-block';
+            const response = await createCompletion(inputText);
+            loading.style.display = 'none';
+            const responseMessage = createMessage(response, false);
+            messages.appendChild(responseMessage);
+            messages.scrollTop = messages.scrollHeight;
+        };
+
+        document.getElementById('submit').addEventListener('click', sendMessage);
+        document.getElementById('input').addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+    </script>
+    <script>
+        // 自动聚焦
+        document.getElementById('input').focus();
+        // 自动滚动到最底部
+        const messages = document.getElementById('messages');
+        messages.scrollTop = messages.scrollHeight;
+    </script>
+</body>
+
+</html>

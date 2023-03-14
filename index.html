@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenAI Chat</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <header>
+        <h1>OpenAI Chat</h1>
+    </header>
+    <main>
+        <div id="messages"></div>
+        <div class="input-box"> <input type="text" id="input" placeholder="Type your message here..." autofocus> <button id="submit">Send</button>
+            <div class="loading">Loading...</div>
+        </div>
+    </main>
+    <div id="editorjs"></div>
+    <div class="container"> <iframe src="https://26f9e0e5-231e-4640.gradio.live/?__theme=dark" frameborder="0" allow="microphone; camera; encrypted-media; fullscreen" title="Gradio App" loading="lazy" width="100%" height="500px" alt="Gradio App"></iframe>
+        <div class="share-buttons"> <a href="https://www.facebook.com/sharer/sharer.php?u=https://example.com" target="_blank" aria-label="Share on Facebook" rel="noopener noreferrer">Share on Facebook</a>
+            <a href="https://twitter.com/intent/tweet?url=https://example.com&text=Check out this Gradio App" target="_blank" aria-label="Share on Twitter" rel="noopener noreferrer">Share on Twitter</a>
+        </div>
+    </div>
+    <script type="module">
+        import axios from 'https://cdn.skypack.dev/axios';
+        const config = {
+            apiKey: 'sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+            orgId: 'org-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+            model: 'text-davinci-003',
+            temperature: 0,
+            maxTokens: 1000,
+            topP: 1,
+            frequencyPenalty: 0,
+            presencePenalty: 0,
+        };
+
+        const createCompletion = async (prompt) => {
+            try {
+                const response = await axios.post('https://api.openai.com/v1/completions', {
+                    prompt: prompt,
+                    model: config.model,
+                    temperature: config.temperature,
+                    max_tokens: config.maxTokens,
+                    top_p: config.topP,
+                    frequency_penalty: config.frequencyPenalty,
+                    presence_penalty: config.presencePenalty,
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${config.apiKey}`,
+                        'OpenAI-Organization': config.orgId,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                return response.data.choices[0].text;
+            } catch (error) {
+                console.error(error);
+                return 'Sorry, an error occurred while processing your request.';
+            }
+        };
+
+        const createMessage = (content, sent) => {
+            return `
+        <div class="message ${sent ? 'sent' : 'received'}">
+            <div class="avatar"></div>
+            <div class="content">
+                <p>${content}</p>
+                <div class="meta">${sent ? 'Sent' : 'Received'}</div>
+            </div>
+        </div>
+    `;
+        };
+
+        const sendMessage = async () => {
+            const inputBox = document.getElementById('input');
+            const inputText = inputBox.value.trim();
+            if (!inputText) {
+                return;
+            }
+            inputBox.value = '';
+            const message = createMessage(inputText, true);
+            const messages = document.getElementById('messages');
+            messages.insertAdjacentHTML('beforeend', message);
+            messages.scrollTop = messages.scrollHeight;
+            const loading = document.querySelector('.loading');
+            loading.style.display = 'inline-block';
+            const response = await createCompletion(inputText);
+            loading.style.display = 'none';
+            const responseMessage = createMessage(response, false);
+            messages.insertAdjacentHTML('beforeend', responseMessage);
+            messages.scrollTop = messages.scrollHeight;
+        };
+
+        document.getElementById('submit').addEventListener('click', sendMessage);
+        document.getElementById('input').addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+
+        const editor = new EditorJS({
+            holder: 'editorjs',
+            tools: {
+                header: {
+                    class: Header,
+                    inlineToolbar: true,
+                },
+                list: {
+                    class: List,
+                    inlineToolbar: true,
+                },
+                code: {
+                    class: CodeTool,
+                    inlineToolbar: true,
+                },
+                quote: {
+                    class: Quote,
+                    inlineToolbar: true,
+                },
+                delimiter: {
+                    class: Delimiter,
+                    inlineToolbar: true,
+                },
+                inlineCode: {
+                    class: InlineCode,
+                    inlineToolbar: true,
+                },
+                linkTool: {
+                    class: LinkTool,
+                    inlineToolbar: true,
+                },
+            },
+        });
+
+        // Get the HTML of the editor content
+        async function getEditorContent() {
+            const outputData = await editor.save();
+            return outputData.blocks.map(block => block.data.text).join('\n');
+        }
+
+        // Send the editor content to OpenAI
+        async function sendEditorContent() {
+            const inputText = await getEditorContent();
+            const message = createMessage(inputText, true);
+            const messages = document.getElementById('messages');
+            messages.insertAdjacentHTML('beforeend', message);
+            messages.scrollTop = messages.scrollHeight;
+            const loading = document.querySelector('.loading');
+            loading.style.display = 'inline-block';
+            const response = await createCompletion(inputText);
+            loading.style.display = 'none';
+            const responseMessage = createMessage(response, false);
+            messages.insertAdjacentHTML('beforeend', responseMessage);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        document.getElementById('editorjs').addEventListener('keydown', event => {
+            if (event.key === 'Enter' && event.ctrlKey) {
+                event.preventDefault();
+                sendEditorContent();
+            }
+        });
+
+        document.getElementById('submit').addEventListener('click', sendEditorContent);
+        document.getElementById('input').addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' && !event.ctrlKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+
+        document.getElementById('input').focus();
+        const messages = document.getElementById('messages');
+        messages.scrollTop = messages.scrollHeight;
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,194 @@
+   /* 设置全局样式 */
+   * {
+       margin: 0;
+       padding: 0;
+       box-sizing: border-box;
+   }
+
+   #editorjs {
+       border: 1px solid #ccc;
+       margin-bottom: 20px;
+       padding: 10px;
+   }
+
+   .ce-block__content {
+       font-family: Arial, sans-serif;
+       font-size: 16px;
+       line-height: 1.5;
+   }
+
+   .ce-header {
+       margin-bottom: 10px;
+   }
+
+   .ce-quote {
+       border-left: 3px solid #ccc;
+       margin: 10px 0;
+       padding: 10px;
+   }
+
+   .ce-code {
+       background-color: #f9f9f9;
+       border: 1px solid #ccc;
+       font-family: Consolas, monospace;
+       font-size: 14px;
+       margin-bottom: 10px;
+       padding: 10px;
+       white-space: pre-wrap;
+   }
+
+   .ce-inline-code {
+       background-color: #f9f9f9;
+       border: 1px solid #ccc;
+       font-family: Consolas, monospace;
+       font-size: 14px;
+       padding: 2px 5px;
+       white-space: pre-wrap;
+   }
+
+   .ce-link {
+       color: #007bff;
+       text-decoration: underline;
+   }
+
+   /* 设置body样式 */
+   body {
+       font-family: Arial, Helvetica, sans-serif;
+   }
+
+   /* 设置header样式 */
+   header {
+       background-color: #333;
+       color: #fff;
+       padding: 20px;
+       text-align: center;
+   }
+
+   /* 设置main样式 */
+   main {
+       display: flex;
+       flex-direction: column;
+       justify-content: space-between;
+       height: 100vh;
+   }
+
+   /* 设置messages样式 */
+   #messages {
+       flex-grow: 1;
+       overflow-y: scroll;
+       padding: 20px;
+   }
+
+   /* 设置message样式 */
+   .message {
+       display: flex;
+       margin-bottom: 20px;
+   }
+
+   /* 设置avatar样式 */
+   .avatar {
+       width: 50px;
+       height: 50px;
+       background-color: #ccc;
+       border-radius: 50%;
+       margin-right: 10px;
+   }
+
+   /* 设置content样式 */
+   .content {
+       background-color: #f1f0f0;
+       padding: 10px;
+       border-radius: 10px;
+       max-width: 60%;
+       word-wrap: break-word;
+   }
+
+   /* 设置sent样式 */
+   .sent .content {
+       background-color: #007bff;
+       color: #fff;
+       align-self: flex-end;
+   }
+
+   /* 设置meta样式 */
+   .meta {
+       font-size: 12px;
+       color: #999;
+       margin-top: 5px;
+       text-align: right;
+   }
+
+   /* 设置input-box样式 */
+   .input-box {
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+       padding: 20px;
+       background-color: #f1f0f0;
+   }
+
+   /* 设置input样式 */
+   #input {
+       flex-grow: 1;
+       margin-right: 10px;
+       padding: 10px;
+       border: none;
+       border-radius: 10px;
+       font-size: 16px;
+       outline: none;
+       /* 去掉input的默认边框 */
+   }
+
+   /* 设置submit样式 */
+   #submit {
+       background-color: #007bff;
+       color: #fff;
+       border: none;
+       border-radius: 10px;
+       padding: 10px 20px;
+       cursor: pointer;
+       font-size: 16px;
+       outline: none;
+       /* 去掉submit的默认边框 */
+   }
+
+   /* 设置loading样式 */
+   .loading {
+       display: none;
+       font-size: 12px;
+       color: #999;
+       margin-right: 10px;
+   }
+
+   /* 设置container样式 */
+   .container {
+       position: relative;
+       /* 让container成为iframe的relative父元素 */
+   }
+
+   /* 设置share-buttons样式 */
+   .share-buttons {
+       position: absolute;
+       /* 让share-buttons成为container的absolute子元素 */
+       top: 20px;
+       right: 20px;
+   }
+
+   /* 设置share-buttons a样式 */
+   .share-buttons a {
+       display: inline-block;
+       margin-right: 10px;
+       color: #fff;
+       text-decoration: none;
+       background-color: #007bff;
+       padding: 10px 20px;
+       border-radius: 10px;
+       font-size: 16px;
+       transition: all 0.3s ease;
+       /* 添加过渡效果 */
+   }
+
+   /* 设置share-buttons a:hover样式 */
+   .share-buttons a:hover {
+       background-color: #0056b3;
+   }
