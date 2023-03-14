@@ -1,33 +1,186 @@
-body>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenAI Chat</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+        }
+
+        #messages {
+            flex-grow: 1;
+            overflow-y: scroll;
+            padding: 20px;
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            background-color: #ccc;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .content {
+            background-color: #f1f0f0;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 60%;
+            word-wrap: break-word;
+        }
+
+        .sent .content {
+            background-color: #007bff;
+            color: #fff;
+            align-self: flex-end;
+        }
+
+        .meta {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        .input-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #f1f0f0;
+        }
+
+        #input {
+            flex-grow: 1;
+            margin-right: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        #submit {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .loading {
+            display: none;
+            font-size: 12px;
+            color: #999;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+
+<body>
+
     <div class="container">
+
+
+        <iframe src="https://26f9e0e5-231e-4640.gradio.live/?__theme=dark" frameborder="0" allow="microphone; camera; encrypted-media; fullscreen" title="Gradio App" loading="lazy" width="100%" height="500px" alt="Gradio App"></iframe>
+        <div class="share-buttons">
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://example.com" target="_blank" aria-label="Share on Facebook" rel="noopener noreferrer">Share on Facebook</a>
+            <a href="https://twitter.com/intent/tweet?url=https://example.com&text=Check out this Gradio App" target="_blank" aria-label="Share on Twitter" rel="noopener noreferrer">Share on Twitter</a>
+        </div>
+    </div>
+    <script defer src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const showMessage = () => {
+            alert("Hello, world!");
+        }
+
+        const showMessageBtn = document.getElementById("show-message-btn");
+        showMessageBtn.addEventListener("click", showMessage);
+
+
+        if (typeof(Storage) !== "undefined") {
+
+            localStorage.setItem("appVisited", true);
+        } else {
+
+            console.log("No Web Storage support");
+        }
+    </script>
+
+</body>
+
+
+
+
+
+<body>
+    <header>
         <h1>OpenAI Chat</h1>
+    </header>
+    <main>
         <div id="messages"></div>
         <div class="input-box">
             <input type="text" id="input" placeholder="Type your message here..." autofocus>
             <button id="submit">Send</button>
             <div class="loading">Loading...</div>
         </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script>
-        const apiKey = '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';
-        const orgId = 'org-tcEMECGlmCYE4XfjCKiVxH1B';
+    </main>
+
+    <script type="module">
+        import axios from 'https://cdn.skypack.dev/axios';
+
+        const config = {
+            apiKey: 'sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+            orgId: 'org-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+            model: 'text-davinci-003',
+            temperature: 0,
+            maxTokens: 1000,
+            topP: 1,
+            frequencyPenalty: 0,
+            presencePenalty: 0,
+        };
 
         const createCompletion = async (prompt) => {
             try {
                 const response = await axios.post('https://api.openai.com/v1/completions', {
                     prompt: prompt,
-                    model: 'text-davinci-003',
-                    temperature: 0,
-                    max_tokens: 1000,
-                    top_p: 1,
-                    frequency_penalty: 0,
-                    presence_penalty: 0,
-
+                    model: config.model,
+                    temperature: config.temperature,
+                    max_tokens: config.maxTokens,
+                    top_p: config.topP,
+                    frequency_penalty: config.frequencyPenalty,
+                    presence_penalty: config.presencePenalty,
                 }, {
                     headers: {
-                        Authorization: `Bearer ${apiKey}`,
-                        'OpenAI-Organization': orgId,
+                        Authorization: `Bearer ${config.apiKey}`,
+                        'OpenAI-Organization': config.orgId,
                         'Content-Type': 'application/json'
                     }
                 });
@@ -37,4 +190,51 @@ body>
                 return 'Sorry, an error occurred while processing your request.';
             }
         };
-        </body>
+
+        const createMessage = (content, sent) => {
+            return `
+        <div class="message">
+          <div class="avatar"></div>
+          <div class="content ${sent ? 'sent' : 'received'}">
+            <p>${content}</p>
+            <div class="meta">${sent ? 'Sent' : 'Received'}</div>
+          </div>
+        </div>
+      `;
+        };
+
+        const sendMessage = async () => {
+            const inputBox = document.getElementById('input');
+            const inputText = inputBox.value.trim();
+            if (!inputText) {
+                return;
+            }
+            inputBox.value = '';
+            const message = createMessage(inputText, true);
+            const messages = document.getElementById('messages');
+            messages.insertAdjacentHTML('beforeend', message);
+            messages.scrollTop = messages.scrollHeight;
+            const loading = document.querySelector('.loading');
+            loading.style.display = 'inline-block';
+            const response = await createCompletion(inputText);
+            loading.style.display = 'none';
+            const responseMessage = createMessage(response, false);
+            messages.insertAdjacentHTML('beforeend', responseMessage);
+            messages.scrollTop = messages.scrollHeight;
+        };
+
+        document.getElementById('submit').addEventListener('click', sendMessage);
+        document.getElementById('input').addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+
+        document.getElementById('input').focus();
+        const messages = document.getElementById('messages');
+        messages.scrollTop = messages.scrollHeight;
+    </script>
+</body>
+
+</html>
